@@ -1,38 +1,45 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import api from '@/api'
 import store from '@/store'
 
 import Home from '@/views/Home'
+import Login from '@/views/Login'
+import LoginCallback from '@/views/LoginCallback'
+import AuthFailed from '@/views/AuthFailed'
 
 Vue.use(Router)
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {requiresAuth: true}
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/callback',
-      name: 'Auth',
-      redirect: to => {
-        // TODO
-      }
+      name: 'Callback',
+      component: LoginCallback
+    },
+    {
+      path: '/auth-failed',
+      name: 'AuthFailed',
+      component: AuthFailed
     }
   ]
 })
 
 router.beforeEach(function(to, from, next) {
-  if (!store.authenticated) {
-    api.login().then((response) => {
-      console.log('TEST')
-      store.commit('setStateToken', response.headers['X-Authentication-State'])
-
-      window.location.href = response.data.authUrl
-    })
+  if (to.meta.requiresAuth && !store.getters.authenticated) {
+    next({name: 'Login'})
   }
 
   next()
