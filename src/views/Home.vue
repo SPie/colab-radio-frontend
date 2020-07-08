@@ -1,9 +1,18 @@
 <template>
-    <h1>ColabR</h1>
+    <div>
+        <h1>ColabR</h1>
+
+        <div><track-search /></div>
+    </div>
 </template>
 
 <script>
+import TrackSearch from '@/components/TrackSearch'
+
 export default {
-    name: 'Home'
+  name: 'Home',
+  components: {
+    TrackSearch
+  }
 }
 </script>

@@ -13,8 +13,13 @@ const api = {
     return this.request.post(
       '/auth-finish?code=' + code + '&state=' + tokenState,
       {},
-      {headers: {'X-Authentication-State': expectedTokenState}}
+      {headers: {'X-Authentication-State': expectedTokenState}, withCredentials: true}
     )
+  },
+
+  searchTrack(query) {
+    console.log('QUERY: ' + query)
+    return this.request.get('/tracks?query=' + query, {withCredentials: true})
   }
 }
 
